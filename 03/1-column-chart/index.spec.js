@@ -1,7 +1,9 @@
-import ColumnChart from '../solution/index.js';
+// import ColumnChart from 'index.js';
+// let {columnChart} = require('index.js');
+// import require from ''
 
 describe('oop-basic-intro-to-dom/column-chart', () => {
-  let columnChart;
+  let {columnChart} = import('./index.js');
 
   beforeEach(() => {
     columnChart = new ColumnChart({

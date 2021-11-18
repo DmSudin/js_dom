@@ -1,3 +1,4 @@
+
 class ColumnChart {
     constructor(data, label, link, value) {
         [this.data, this.label, this.link, this.value] = [...arguments];
@@ -38,7 +39,7 @@ class ColumnChart {
         this.element = element.firstElementChild;
     }
 }
-
+export default { ColumnChart };
 
 const chart = new ColumnChart([60, 80, 100, 12, 12, 23, 34, 45, 56, 67, 78, 78,60, 80, 100, 12, 12, 23, 34, 45, 56, 67, 78, 78], '', 'https://ya.ru', );
 const element = document.getElementById("root");

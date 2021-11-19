@@ -6,13 +6,13 @@ class ColumnChart {
     }
 
 
-    getDataHtml = function(data)  {
+    getDataHtml = function(data) {
         const rowCount = data.length;
         const flexBasis = `${100 / rowCount}%`;
         let HtmlString = '';
 
         data.forEach(element => {
-            HtmlString += `<div class="chart__row" style="height: ${element}px;"> </div>`
+            HtmlString += `<div class="chart__row" style="height: ${element}px;"> </div>`;
         });
         return HtmlString;
     }
@@ -41,6 +41,6 @@ class ColumnChart {
 }
 export default { ColumnChart };
 
-const chart = new ColumnChart([60, 80, 100, 12, 12, 23, 34, 45, 56, 67, 78, 78,60, 80, 100, 12, 12, 23, 34, 45, 56, 67, 78, 78], '', 'https://ya.ru', );
+const chart = new ColumnChart([60, 80, 100, 12, 12, 23, 34, 45, 56, 67, 78, 78, 60, 80, 100, 12, 12, 23, 34, 45, 56, 67, 78, 78], '', 'https://ya.ru');
 const element = document.getElementById("root");
 root.append(chart.element);

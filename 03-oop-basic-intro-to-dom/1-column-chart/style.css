@@ -1,4 +1,4 @@
-.chart {
+.column-chart {
     height: 300px;
     border: 2px solid #c4c4c4;
     border-radius: 4px;
@@ -9,17 +9,21 @@
     padding: 10px;
 }
 
-.chart__caption {
+.column-chart__caption {
     width: 100%;
     display: flex;
     justify-content: space-between;
 }
 
-.chart__value {
+.column-chart__title {
+
+}
+
+.column-chart__header {
     align-self: flex-start;
 }
 
-.chart__graph {
+.column-chart__chart {
     display: flex;
     flex: 1 1 auto;
     flex-grow: 1;
@@ -27,8 +31,8 @@
     width: 100%;
 }
 
-.chart__row {
+.column-chart__row {
     flex: 1 1 100%;
-    background: greenyellow;
+    background: #e4e7e0;
     margin-left: 2px;
 }

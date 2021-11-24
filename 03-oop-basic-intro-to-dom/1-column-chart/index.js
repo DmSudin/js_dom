@@ -1,93 +1,91 @@
 
+// to uncomment before tests
 export default
 class ColumnChart {
+    chartHeight = 50;
+    subElements = {};
+    element;
 
-    constructor() {
-        this.data = [];
-        this.label = '';
-        this.link = '';
-        this.value = 0;
-        this.chartHeight = 50;
-
-        if (arguments.length && Array.isArray(Object.values(arguments[0])[0])) {
-            this.data = Object.values(arguments[0])[0];
-        }
-
-        if (typeof arguments[0] === 'object') {
-            const argument = arguments[0];
-
-            if (Object.keys(argument).length === 1 && (!Array.isArray(Object.keys(argument)[0]))) {
-                switch (typeof Object.values(argument)[0]) {
-                case 'number':
-                    this.value = Object.values(argument)[0];
-                    break;
-
-                case 'string':
-                    if (Object.values(argument)[0].startsWith('http')) this.link = Object.values(argument)[0];
-                    else this.label = Object.values(argument)[0];
-                    break;
-                }
-
-            }
-            else if (Object.keys(argument).length === 1 && (Array.isArray(Object.keys(argument)[0]))) {
-                console.error('data array');
-            }
-            else {
-                //  should have ability to define "formatHeading" function
-                // this.formatHeadingFunction = Object.values(argument)[0];
-                // const amount = Object.values(argument)[1];
-                // this.value = this.formatHeadingFunction(amount);
-            }
-        }
-        this.element = this.render();
+    constructor({
+        data = [],
+        label = '',
+        link = '',
+        value = 0,
+        formatHeading = formatString => formatString,
+    } = {}) {
+        this.data = data;
+        this.label = label;
+        this.link = link;
+        this.value = formatHeading(value);
+        this.render();
     }
 
-    getDataHtml = function(data) {
+    getColumnBody = function(data) {
         let htmlString = '';
         const maxValue = Math.max(...data);
         const scale = this.chartHeight / maxValue;
-        const rowCount = data.length;
 
         htmlString =
         data.map(elem => {
             const percent = (elem / maxValue * 100).toFixed();
-            return `<div class="column-chart__row" data-tooltip=${percent}%
-            style="--value: ${Math.floor(scale * elem)}; height: ${percent}%;"></div>`;
+            return `<div style="--value: ${Math.floor(scale * elem)}; height: ${percent}%;" data-tooltip=${percent}% class="column-chart__row"
+            ></div>`;
         }).join('');
 
         return htmlString;
     }
 
-    render() {
-        const div = document.createElement('div');
-        div.innerHTML = `
-        <div class="column-chart">
+    getSubElements(element) {
+        const result = {};
+        const elements = element.querySelectorAll('[data-element]');
+
+        for (const subElement of elements) {
+            const name = subElement.dataset.element;
+            result[name] = subElement;
+        }
+
+        return result;
+    }
+
+    getLink() {
+        return this.link ? `<a class=column_chart__link href="${this.link}">View all</a>` : '';
+    }
+
+    get template() {
+        return `
+        <div class="column-chart column-chart_loading style="--chart-height: ${this.chartHeight}">
             <div class="column-chart__caption">
-                <div class="column-chart__title">${this.label}</div>
-                <div class="column-chart__link">${this.linkText}</div>
+                <div class="column-chart__title">Total ${this.label}</div>
+                <div class="column-chart__link">${this.getLink()}</div>
             </div>
-            <div class="column-chart__header">${this.value}</div>
-            <div class="column-chart__chart"></div>
+            <div data-element="header" class="column-chart__header">${this.value}</div>
+            <div data-element="body" class="column-chart__chart">${this.getColumnBody(this.data)}</div>
         </div>`;
+    }
+
+    render() {
+        const element = document.createElement('div');
+        element.innerHTML = this.template;
 
         if (this.link) {
             this.linkText = `<a href="${this.link}">View all</a>`;
         }
-        if (this.data) {
-            const graph = div.querySelector('div.column-chart__chart');
-            graph.innerHTML = this.getDataHtml(this.data);
+        if (this.data.length) {
+            element.firstElementChild.classList.remove('column-chart_loading');
+            const graph = element.querySelector('div.column-chart__chart');
+            graph.innerHTML = this.getColumnBody(this.data);
         }
 
-        if (!this.data.length && !this.link && !this.value && !this.label) {
-            div.firstElementChild.classList.add('column-chart_loading');
-        }
-
-        return div.firstElementChild;
+        this.element = element.firstElementChild;
+        this.subElements = this.getSubElements(element.firstElementChild);
+        return element.firstElementChild;
     }
 
     update(newData) {
-        const graph = document.querySelector('div.column-chart__chart');
-        graph.innerHTML = this.getDataHtml(newData);
+        const columnBody = this.subElements.body;
+        columnBody.innerHTML = this.getColumnBody(newData);
+        // const graph = document.querySelector('div.column-chart__chart');
+        // graph.innerHTML = this.getColumnBody(newData);
     }
 
     remove() {
@@ -99,9 +97,16 @@ class ColumnChart {
 }
 
 // to comment before tests:
-
-//  should have ability to define "formatHeading" function
 // const formatHeading = data => `USD ${data}`;
-// const value = 100;
-// columnChart = new ColumnChart({ formatHeading, value });
+// const data = [10, 300, 30];
+// const data2 = [30, 10, 300];
+// const label = 'sells';
+// const link = 'https://ya.ru';
+// const value = 999;
+// const columnChart = new ColumnChart({ data, label, link, value });
 // root.append(columnChart.element);
+
+// setTimeout(() => {
+//     columnChart.update(data2);
+
+// }, 3000);

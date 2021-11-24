@@ -1,13 +1,21 @@
 
-export default
+// export default
 class ColumnChart {
+    chartHeight = 50;
+    subElements = {};
+    element;
 
-    constructor() {
-        this.data = [];
-        this.label = '';
-        this.link = '';
-        this.value = 0;
-        this.chartHeight = 50;
+    constructor({
+        data = [],
+        label = '',
+        link = '',
+        value = 0,
+        formatHeading = formatString => formatString,
+    } = {}) {
+        this.data = data;
+        this.label = label;
+        this.link = link;
+        this.value = formatHeading(value);
 
         if (arguments.length && Array.isArray(Object.values(arguments[0])[0])) {
             this.data = Object.values(arguments[0])[0];
@@ -42,7 +50,7 @@ class ColumnChart {
         this.element = this.render();
     }
 
-    getDataHtml = function(data) {
+    getColumnBody = function(data) {
         let htmlString = '';
         const maxValue = Math.max(...data);
         const scale = this.chartHeight / maxValue;
@@ -51,43 +59,58 @@ class ColumnChart {
         htmlString =
         data.map(elem => {
             const percent = (elem / maxValue * 100).toFixed();
-            return `<div class="column-chart__row" data-tooltip=${percent}%
-            style="--value: ${Math.floor(scale * elem)}; height: ${percent}%;"></div>`;
+            return `<div style="--value: ${Math.floor(scale * elem)}; height: ${percent}%;" data-tooltip=${percent}% class="column-chart__row"
+            ></div>`;
         }).join('');
 
         return htmlString;
     }
 
-    render() {
-        const div = document.createElement('div');
-        div.innerHTML = `
-        <div class="column-chart">
+    getLink() {
+        return this.link ? `<a class=column_chart__link href="${this.link}">View all</a>` : '';
+    }
+
+    get template() {
+        return `
+        <div class="column-chart column-chart_loading style="--chart-height: ${this.chartHeight}">
             <div class="column-chart__caption">
-                <div class="column-chart__title">${this.label}</div>
-                <div class="column-chart__link">${this.linkText}</div>
+                <div class="column-chart__title">Total ${this.label}</div>
+                <div class="column-chart__link">${this.getLink()}</div>
             </div>
-            <div class="column-chart__header">${this.value}</div>
-            <div class="column-chart__chart"></div>
+            <div data-element="header" class="column-chart__header">${this.value}</div>
+            <div data-element="body" class="column-chart__chart">${this.getColumnBody(this.data)}</div>
         </div>`;
+    }
+
+    render() {
+        const wrapperDiv = document.createElement('div');
+        const dataDiv = document.createElement('div');
+        dataDiv.classList.add(['column-chart', 'column-chart_loading']);
+        dataDiv.innerHTML = `
+        <div class="column-chart__caption">
+
+        </div>
+        `;
+
+        //todo continue
+        wrapperDiv.innerHTML = this.template;
 
         if (this.link) {
             this.linkText = `<a href="${this.link}">View all</a>`;
         }
-        if (this.data) {
+        if (this.data.length) {
+            wrapperDiv.firstElementChild.classList.remove('column-chart_loading');
             const graph = div.querySelector('div.column-chart__chart');
-            graph.innerHTML = this.getDataHtml(this.data);
+            graph.innerHTML = this.getColumnBody(this.data);
         }
+        wrapperDiv.append(dataDiv);
 
-        if (!this.data.length && !this.link && !this.value && !this.label) {
-            div.firstElementChild.classList.add('column-chart_loading');
-        }
-
-        return div.firstElementChild;
+        return wrapperDiv.firstElementChild;
     }
 
     update(newData) {
         const graph = document.querySelector('div.column-chart__chart');
-        graph.innerHTML = this.getDataHtml(newData);
+        graph.innerHTML = this.getColumnBody(newData);
     }
 
     remove() {
@@ -101,7 +124,13 @@ class ColumnChart {
 // to comment before tests:
 
 //  should have ability to define "formatHeading" function
-// const formatHeading = data => `USD ${data}`;
-// const value = 100;
-// columnChart = new ColumnChart({ formatHeading, value });
-// root.append(columnChart.element);
+const formatHeading = data => `USD ${data}`;
+const value = 100;
+const data = [];
+const columnChart = new ColumnChart({ data });
+root.append(columnChart.element);
+data2 = [10, 20, 30];
+
+setTimeout(() => {
+    columnChart.update(data2);
+}, 3000);

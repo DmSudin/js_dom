@@ -67,6 +67,7 @@ describe('async-code-fetch-api-part-1/column-chart', () => {
   it('should render data correctly', () => {
     const { body } = columnChart.subElements;
     const data = Object.values(ordersData);
+    console.error('subElements', columnChart.subElements)
 
     expect(body.children.length).toEqual(data.length);
   });

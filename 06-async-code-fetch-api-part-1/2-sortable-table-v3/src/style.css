@@ -84,7 +84,7 @@ body {
   cursor: pointer;
 }
 
-.sortable-table__cell[data-order='asc'] .sort-arrow {
+.sortable-table__cell .sortable-table__sort-arrow_asc {
   width: 0;
   height: 0;
   border-left: 4px solid transparent;
@@ -92,7 +92,7 @@ body {
   border-bottom: 4px solid var(--grey-light);
 }
 
-.sortable-table__cell[data-order='desc'] .sort-arrow {
+.sortable-table__cell .sortable-table__sort-arrow_desc {
   width: 0;
   height: 0;
   border-left: 4px solid transparent;

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div id="slider" class="slider">
+    <div class="thumb"></div>
+  </div>
+
+  <script>
+    const lever = slider.querySelector('.thumb');
+    const BOUNDARY_LEFT = slider.getBoundingClientRect().left;
+    const BOUNDARY_RIGHT = slider.getBoundingClientRect().right;
+    const PERSISTENT_Y = lever.getBoundingClientRect().top + 'px';
+    const HALF_WIDTH = lever.getBoundingClientRect().width / 2;
+
+    lever.onmousedown = function(event) {
+        console.error('mouse down', event);
+        const center = lever.getBoundingClientRect().left + HALF_WIDTH;
+        lever.style.position = 'absolute';
+        document.body.append(lever);
+        const shiftX = center - event.clientX;
+        
+        lever.style.top = PERSISTENT_Y;
+        lever.style.left = event.clientX + shiftX - HALF_WIDTH + 'px';
+
+        function onMouseMove(event) {
+            if ((parseInt(lever.getBoundingClientRect().left) < BOUNDARY_LEFT) 
+            || (parseInt(lever.getBoundingClientRect().right) > BOUNDARY_RIGHT)) {
+                console.error('alert!');
+                // lever.style.left = BOUNDARY_LEFT + 'px';
+                
+            
+            } 
+            else lever.style.left = event.clientX + shiftX - HALF_WIDTH + 'px';
+
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+
+        document.onmouseup = function(event) {
+        document.removeEventListener('mousemove', onMouseMove);
+        lever.onmouseup = null;
+        }
+
+        lever.ondragstart = function() {
+            return false;
+        }
+
+    }
+
+
+
+
+  </script>
+
+</body>
+</html>

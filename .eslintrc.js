@@ -17,8 +17,6 @@ module.exports = {
       const: 'never'
     }],
     'arrow-parens': ['error', 'as-needed'],
-    'no-console': 'warn',
-    'no-debugger': 'error',
     'no-dupe-keys': 'warn',
     'no-dupe-args': 'warn',
     'no-duplicate-case': 'warn',

@@ -12,17 +12,17 @@
 <div id="holder"></div>
 
 <script type="module">
-  import SortableList from '../solution/index.js';
+  import SortableList from './index.js';
 
-  const data = [1, 2, 3, 4, 5];
+  const data = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   const sortableList = new SortableList({
     items: data.map(item => {
       const element = document.createElement('li');
 
       element.innerHTML = `
-        <span data-grab-handle>drag me!</span>
-        <span data-delete-handle>${item} delete me!</spa>
+        <span data-grab-handle>drag</span>
+        <span data-delete-handle>${item} delete</span>
       `;
 
       return element;

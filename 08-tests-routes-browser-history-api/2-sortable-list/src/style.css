@@ -29,7 +29,8 @@ body {
 .sortable-list {
   position: relative;
   padding: 0;
-  margin: 12px 0;
+  margin:  0;
+  /* margin: 12px 0; */
 }
 
 .sortable-list__item {
@@ -43,7 +44,8 @@ body {
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
   border-radius: 4px;
-  margin: 16px 0;
+  margin: 0;
+  /* margin: 16px 0; */
   position: relative;
   box-sizing: border-box;
 }
@@ -97,7 +99,7 @@ body {
 }
 
 .sortable-list__item.sortable-list__item_dragging {
-  position: fixed;
+  /* position: fixed; */
   max-width: 100%;
   cursor: grabbing;
   border: 1px solid var(--blue);
@@ -109,4 +111,8 @@ body {
   border: 1px solid var(--blue);
   margin: 3px 0;
   border-radius: 4px;
+}
+
+body {
+  margin: 0;
 }
